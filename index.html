@@ -3,69 +3,136 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>For Someone Special</title>
+    <title>For Someone Special ❤️</title>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link href="https://fonts.googleapis.com/css2?family=Itim&display=swap" rel="stylesheet">
     <style>
         body {
             background-color: #ffebee;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
             font-family: 'Kanit', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
         }
-        .container {
+
+        /* สไตล์ของ Slider */
+        .slider-container {
+            width: 90%;
+            max-width: 400px;
+            position: relative;
+            overflow: hidden;
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            background: white;
+            padding: 10px;
+        }
+        .slider {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+        .slider img {
+            width: 100%;
+            border-radius: 15px;
+            display: block;
+        }
+
+        /* ปุ่มจุด (Navigation Dots) */
+        .navigation-button {
             text-align: center;
+            margin: 15px 0;
         }
-        .heart {
-            font-size: 100px;
-            color: #ff4081;
+        .dot {
             cursor: pointer;
-            animation: heartbeat 1.2s infinite;
+            height: 12px;
+            width: 12px;
+            margin: 0 5px;
+            background-color: #bbb;
+            border-radius: 50%;
+            display: inline-block;
+            transition: 0.3s;
         }
-        @keyframes heartbeat {
-            0% { transform: scale(1); }
-            20% { transform: scale(1.25); }
-            40% { transform: scale(1); }
+        .active, .dot:hover {
+            background-color: #ff4081;
+            transform: scale(1.2);
         }
+
         .btn-love {
             background-color: #ff4081;
             color: white;
             border: none;
-            padding: 15px 30px;
-            font-size: 1.2rem;
+            padding: 15px 40px;
+            font-size: 1.5rem;
             border-radius: 50px;
             cursor: pointer;
             box-shadow: 0 4px 15px rgba(255, 64, 129, 0.4);
-            transition: 0.3s;
-        }
-        .btn-love:hover {
-            transform: translateY(-3px);
-            background-color: #f50057;
+            margin-top: 20px;
+            font-family: 'Kanit', sans-serif;
         }
     </style>
 </head>
 <body>
+    <h1 style="color: #d81b60;">Happy Valentine's Day </h1>
+    <h1 style="color: #d81b60;">✩°｡⋆⸜ 🎧✮ ⸝⋆｡°✩ </h1>
+    <div class="slider-container">
+        <div class="slider" id="main-slider">
+            <img src="S__43597829_0.jpg" alt="รูปที่ 1">
+            <img src="S__43597830_0.jpg" alt="รูปที่ 2">
+            <img src="S__43597831_0.jpg" alt="รูปที่ 3">
+        </div>
+    </div>
 
-<div class="container">
-    <div class="heart">❤️</div>
-    <h1 style="color: #d81b60;"> 🌻 Happy Valentine's Day Kubbb ˚ ༘♡ ⋆｡˚ </h1>
-    <button class="btn-love" onclick="confess()">click here!! 
-        
-    </button>
-</div>
+    <div class="navigation-button">
+        <span class="dot active" onclick="changeSlide(0)"></span>
+        <span class="dot" onclick="changeSlide(1)"></span>
+        <span class="dot" onclick="changeSlide(2)"></span>
+    </div>
 
-<div id="player" style="display:none;"></div>
+    <button class="btn-love" onclick="confess()">Click here!! </button>
 
-<script>
-// 2. โหลด YouTube IFrame Player API
-var tag = document.createElement('script');
-tag.src = "https://www.youtube.com/iframe_api";
-var firstScriptTag = document.getElementsByTagName('script')[0];
-firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+    <div id="player" style="display:none;"></div>
 
+    <script>
+        // --- ระบบสไลด์รูปภาพอัตโนมัติ ---
+let currentSlide = 0;
+const slides = document.querySelectorAll('#main-slider img');
+const totalSlides = slides.length;
+
+// ฟังก์ชันเปลี่ยนรูป
+function changeSlide(index) {
+    const slider = document.getElementById('main-slider');
+    const dots = document.querySelectorAll('.dot');
+    
+    currentSlide = index;
+    slider.style.transform = `translateX(-${index * 100}%)`;
+    
+    // อัปเดตสถานะจุด Navigation
+    dots.forEach(dot => dot.classList.remove('active'));
+    dots[index].classList.add('active');
+}
+
+// ฟังก์ชันเลื่อนไปสไลด์ถัดไป
+function nextSlide() {
+    currentSlide = (currentSlide + 1) % totalSlides; // วนกลับไปรูปแรกเมื่อถึงรูปสุดท้าย
+    changeSlide(currentSlide);
+}
+
+// ตั้งเวลาให้สไลด์เองทุกๆ 3 วินาที (3000 มิลลิวินาที)
+let slideInterval = setInterval(nextSlide, 3000);
+
+// ทริค: ถ้าเรากดเปลี่ยนรูปเอง ให้หยุดนับเวลาใหม่ เพื่อไม่ให้รูปเด้งไวไป
+function manualChange(index) {
+    clearInterval(slideInterval); // หยุดตัวนับเดิม
+    changeSlide(index); // เปลี่ยนรูป
+    slideInterval = setInterval(nextSlide, 3000); // เริ่มนับเวลาใหม่
+}
+
+// --- อย่าลืมเปลี่ยนชื่อฟังก์ชันที่ปุ่ม Dot ใน HTML เป็น manualChange(index) ด้วยนะครับ ---
+
+
+// --- ระบบ YouTube API (เหมือนเดิม) ---
 var player;
 function onYouTubeIframeAPIReady() {
     player = new YT.Player('player', {
@@ -79,6 +146,7 @@ function onYouTubeIframeAPIReady() {
     });
 }
 
+// --- ฟังก์ชัน Popup บอกรัก ---
 function confess() {
     // 3. สั่งให้เพลง YouTube เล่น
     if (player && player.playVideo) {
@@ -88,7 +156,7 @@ function confess() {
     // 4. แสดง Popup (ใช้ SweetAlert2 เหมือนเดิม)
     Swal.fire({
     html: `
-        <p style="font-family: 'Itim', cursive; font-size: 20px; color: #ff6b81; text-shadow: 2px 2px 4px rgba(0,0,0,0.1); line-height: 1.6;"> 
+        <p font-family: 'Kanit', sans-serif; font-size: 20px; color: #ff6b81; text-shadow: 2px 2px 4px rgba(0,0,0,0.1); line-height: 1.6;"> 
             🌻 Thank you for making each day a good day for me. 🌟 <br> 
             <span style="font-size: 28px; font-weight: bold;">You are my smile.</span> <br> *✧･ﾟ: *✧･ﾟ:*
         </p>
@@ -109,4 +177,6 @@ function confess() {
     confirmButtonColor: '#ff4081'
 });
 }
-</script>
+    </script>
+</body>
+</html>
